@@ -14,7 +14,7 @@
   <%= button_to "Delete", @room, method: :delete %>
 <% end %>
 
-<div class="messages">
+<div class="messages" id="messages">
   <%= render @room.messages %>
 </div>
 

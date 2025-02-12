@@ -10,6 +10,9 @@ class MessagesController < ApplicationController
 
     respond_to do |format|
       if @message.save
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.append("messages", @message)
+        end
         format.html { redirect_to @room }
       else
         format.html { render :new, status: :unprocessable_entity }
