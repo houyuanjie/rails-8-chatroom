@@ -1,16 +1,24 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @room %>
+<%= turbo_frame_tag "room" do %>
+  <%= render @room %>
 
-<div>
-  <%= link_to "Edit this room", edit_room_path(@room) %> |
-  <%= link_to "Back to rooms", rooms_path %>
+  <p>
+    <%= link_to "Edit", edit_room_path(@room) %> |
 
-  <%= button_to "Destroy this room", @room, method: :delete %>
-</div>
+    <%# This link will replace the entire page when clicked,
+      as its `data-turbo-frame` attribute is set to "_top" %>
+    <%= link_to "Back to rooms", rooms_path, "data-turbo-frame": "_top" %>
+  </p>
+
+  <%= button_to "Delete", @room, method: :delete %>
+<% end %>
 
 <div class="messages">
   <%= render @room.messages %>
 </div>
 
-<%= link_to "New message", new_room_message_path(@room) %>
+<%# When the form inside this <turbo-frame> is submitted, it will replace the entire page,
+  because its `target` attribute is set to "_top"
+  and messages controller redirects back to this page %>
+<%= turbo_frame_tag "new_message", src: new_room_message_path(@room), target: "_top" %>
